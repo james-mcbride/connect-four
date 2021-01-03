@@ -1,0 +1,38 @@
+html{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+body{
+    width: 60%;
+    height: 60%;
+    margin: 20%;
+}
+
+#header{
+    text-align: center;
+    color: blue;
+    font-size: x-large;
+}
+
+#game-options{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#single-player{
+    color: red;
+    border: 2px solid black;
+    padding: 10px 25px;
+    background-color: #cece10;
+}
+
+#multi-player{
+    color: #cece10;
+    border: 2px solid black;
+    padding: 10px 25px;
+    background-color: red;
+
+
+}

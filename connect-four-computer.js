@@ -1,6 +1,8 @@
 var windowWidth= window.innerWidth
 var centerNewGame=(windowWidth-754)/2
 $("#new-game").css("left", centerNewGame)
+var centerTurnTracker=(windowWidth-178)/2
+ $("#turn-tracker").css("left", centerTurnTracker )
 
 
 function connectFour(board) {
@@ -448,10 +450,10 @@ $(".circle").click(function (x) {
         })
         $(element).children().css("transform", "translate(0, 500px)")
         initialBoard[computerPlay[0]][computerPlay[1]] = "Y";
-        $("#turn-tracker").html("Red Player's Turn")
+        $("#turn-tracker").html("Your turn!")
         $("#turn-tracker").css("color", "red")
         $("#turn-tracker").css("right", "unset")
-        $("#turn-tracker").css("left", "25px")
+        $("#turn-tracker").css("left", centerTurnTracker)
 
         //This will check our array of values to see if there is a winner yet.
         var gameProgress = connectFour(initialBoard);
