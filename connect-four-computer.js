@@ -71,13 +71,17 @@ function connectFour(board) {
 
                     //first will check number of vertical streak.
                     if (i>0) {
-                        while (board[i - 1][j] === "Y") {
+                        while (board[i - 1][j] === "R") {
                             currentTotal++
-                            i--;
+                            if (i>1){
+                                i--;
+                            } else{
+                                break;
+                            }
                         }
                     }
                     if(currentTotal===3){
-                        return [i,j]
+                        return [currentRow,currentColumn]
                     } else{
                         currentTotal=0;
                         i=currentRow;
@@ -87,21 +91,29 @@ function connectFour(board) {
 
                     //will check total to the right first.
                     if (j<6) {
-                        while (board[i][j + 1] === "Y") {
+                        while (board[i][j + 1] === "R") {
                             currentTotal++
-                            j++;
+                            if (j<5) {
+                                j++;
+                            } else{
+                                break;
+                            }
                         }
                     }
                     j=currentColumn;
                     //and then check total to the left.
                     if (j>0) {
-                        while (board[i][j - 1] === "Y") {
+                        while (board[i][j - 1] === "R") {
                             currentTotal++
-                            j--;
+                            if (j>1) {
+                                j--;
+                            } else{
+                                break;
+                            }
                         }
                     }
                     if(currentTotal===3){
-                        return [i,j]
+                        return [currentRow,currentColumn]
                     } else{
                         currentTotal=0;
                         j=currentColumn
@@ -110,24 +122,32 @@ function connectFour(board) {
                     //next will check downwards diagonal
                     //first will check to the right
                     if (i>0 && j<6) {
-                        while (board[i - 1][j + 1] === "Y") {
+                        while (board[i - 1][j + 1] === "R") {
                             currentTotal++;
-                            j++;
-                            i--;
+                            if (i>1 && j<5) {
+                                j++;
+                                i--;
+                            } else{
+                                break;
+                            }
                         }
                     }
                     j=currentColumn;
                     i=currentRow;
                     //and then check total to the left.
                     if (i<5&& j>0) {
-                        while (board[i + 1][j - 1] === "Y") {
+                        while (board[i + 1][j - 1] === "R") {
                             currentTotal++
-                            i++;
-                            j--;
+                            if (i<4 && j>1) {
+                                i++;
+                                j--;
+                            } else{
+                                break;
+                            }
                         }
                     }
                     if(currentTotal===3){
-                        return [i,j]
+                        return [currentRow,currentColumn]
                     } else{
                         currentTotal=0;
                         i=currentRow
@@ -137,24 +157,32 @@ function connectFour(board) {
                     //next will check upwards diagonal
                     //first will check to the right
                     if (i<5 && j<6) {
-                        while (board[i + 1][j + 1] === "Y") {
+                        while (board[i + 1][j + 1] === "R") {
                             currentTotal++;
-                            j++;
-                            i++;
+                            if (i<4 && j<5) {
+                                j++;
+                                i++;
+                            } else{
+                                break;
+                            }
                         }
                     }
                     j=currentColumn;
                     i=currentRow;
                     //and then check total to the left.
                     if (i>0 && j>0) {
-                        while (board[i - 1][j - 1] === "Y") {
+                        while (board[i - 1][j - 1] === "R") {
                             currentTotal++
-                            i--;
-                            j--;
+                            if (i>1 && j>1) {
+                                i--;
+                                j--;
+                            } else{
+                                break;
+                            }
                         }
                     }
                     if(currentTotal===3){
-                        return [i,j]
+                        return [currentRow,currentColumn]
                     } else{
                         currentTotal=0;
                         i=currentRow
@@ -176,14 +204,19 @@ function connectFour(board) {
                 let highestTotal=0;
                 let currentTotal=0;
                 let totalStreak=0;
-               if (board[i][j]==="-"&&(board[i+1][j]!=="-" || i===5)){
+               if (board[i][j]==="-"&&(i===5 || board[i+1][j]!=="-" )){
 
                    //first will check number of vertical streak.
                    if (i>0) {
                        while (board[i - 1][j] === "Y") {
                            currentTotal++
-                           i--;
+
                            totalStreak++;
+                           if (i>1) {
+                               i--;
+                           } else{
+                               break;
+                           }
                        }
                    }
                    if(currentTotal>highestTotal){
@@ -201,8 +234,13 @@ function connectFour(board) {
                    if (j<6) {
                        while (board[i][j + 1] === "Y") {
                            currentTotal++
-                           j++;
                            totalStreak++;
+                           if (j < 5) {
+                               j++;
+                           } else {
+                               break;
+
+                           }
                        }
                    }
                    j=currentColumn;
@@ -210,8 +248,13 @@ function connectFour(board) {
                    if (j>0) {
                        while (board[i][j - 1] === "Y") {
                            currentTotal++
-                           j--;
                            totalStreak++;
+                           if (j>1) {
+                               j--;
+                           } else {
+                               break
+                           }
+
                        }
                    }
                    if(currentTotal>highestTotal){
@@ -228,9 +271,14 @@ function connectFour(board) {
                    if (i>0&&j<6) {
                        while (board[i - 1][j + 1] === "Y") {
                            currentTotal++;
-                           j++;
-                           i--;
                            totalStreak++;
+                           if (i >1 && j < 5) {
+                               j++;
+                               i--;
+                           } else {
+                               break;
+
+                           }
                        }
                    }
                    j=currentColumn;
@@ -239,9 +287,13 @@ function connectFour(board) {
                    if (i<5 && j>0) {
                        while (board[i + 1][j - 1] === "Y") {
                            currentTotal++
-                           i++;
-                           j--;
                            totalStreak++;
+                           if (i<4 && j>1) {
+                               i++;
+                               j--;
+                           } else{
+                           break;
+                           }
                        }
                    }
                    if(currentTotal>highestTotal){
@@ -260,9 +312,13 @@ function connectFour(board) {
                    if (i<5&&j<6) {
                        while (board[i + 1][j + 1] === "Y") {
                            currentTotal++;
-                           j++;
-                           i++;
                            totalStreak++;
+                           if (i<4&&j<5) {
+                               j++;
+                               i++;
+                           } else{
+                           break;
+                        }
                        }
                    }
                    j=currentColumn;
@@ -271,9 +327,13 @@ function connectFour(board) {
                    if (i>0 && j>0) {
                        while (board[i - 1][j - 1] === "Y") {
                            currentTotal++
-                           i--;
-                           j--;
                            totalStreak++;
+                           if (i>1 && j>1) {
+                               i--;
+                               j--;
+                           } else{
+                           break;
+                           }
                        }
                    }
                    if(currentTotal>highestTotal){
@@ -375,18 +435,18 @@ $(".circle").click(function (x) {
 
         //if no winner, the computer will do there play.
         var computerPlay=computersMove(initialBoard);
-        var computerPlayChildClass="."+computerPlay[1];
-        var computerPlayParentClass="."+computerPlay[0];
-
+        var computerPlayChildClass="."+(computerPlay[1]+1);
+        var computerPlayParentClass="."+(computerPlay[0]+1);
+        console.log(computerPlayParentClass)
         var element = $(computerPlayChildClass, computerPlayParentClass);
-        $(element).css("background-color", "yellow")
-        $(element).css({
+        $(element).children().css("background-color", "yellow")
+        $(element).children().css({
             "transition-property": "transform",
             "transition-duration": "1s",
             "transition-timing-function": "linear",
-            "transition-delay": "100ms"
+            "transition-delay": "1000ms"
         })
-        $(element).css("transform", "translate(0, 500px)")
+        $(element).children().css("transform", "translate(0, 500px)")
         initialBoard[computerPlay[0]][computerPlay[1]] = "Y";
         $("#turn-tracker").html("Red Player's Turn")
         $("#turn-tracker").css("color", "red")
