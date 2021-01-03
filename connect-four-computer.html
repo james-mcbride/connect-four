@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Connect Four</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="connect-four.css">
+</head>
+<body>
+<div id="turn-tracker">Red Player's Turn</div>
+<div id="new-game">
+    Would you like to play again?<br>
+    <button id="yes">Yes</button>
+    <button id="no">Yes</button>
+
+</div>
+<div class="row">
+    <div class="row- 1 col-12">
+        <div class="circle 1">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 2">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 3">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 4">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 5">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 6">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 7">
+            <div class="color">
+            </div>
+        </div>
+    </div>
+    <div class="row- 2 col-12">
+        <div class="circle 1">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 2">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 3">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 4">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 5">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 6">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 7">
+            <div class="color">
+            </div>
+        </div>
+    </div>
+    <div class="row- 3 col-12">
+        <div class="circle 1">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 2">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 3">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 4">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 5">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 6">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 7">
+            <div class="color">
+            </div>
+        </div>
+    </div>
+    <div class="row- 4 col-12">
+        <div class="circle 1">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 2">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 3">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 4">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 5">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 6">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 7">
+            <div class="color">
+            </div>
+        </div>
+    </div>
+    <div class="row- 5 col-12">
+        <div class="circle 1">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 2">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 3">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 4">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 5">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 6">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 7">
+            <div class="color">
+            </div>
+        </div>
+    </div>
+    <div class="row- 6 col-12">
+        <div class="circle 1">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 2">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 3">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 4">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 5">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 6">
+            <div class="color">
+            </div>
+        </div>
+        <div class="circle 7">
+            <div class="color">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="connect-four-computer.js"></script>
+</body>
+</html>
