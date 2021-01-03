@@ -1,13 +1,7 @@
-// var windowWidth= window.innerWidth
-// $("body").css("margin-left", windowWidth*.1)
-// $("body").css("width", windowWidth*.8)
-// $(".circle").css("width", windowWidth*.64/7)
-//
-//
-// var windowHeight=window.innerHeight
-// $("body").css("height", windowWidth*6/7)
-// $("body").css("padding-top", windowWidth*1/14)
-// $(".row-").css("height", windowHeight*.8/6)
+var windowWidth= window.innerWidth
+var centerNewGame=(windowWidth-754)/2
+$("#new-game").css("left", centerNewGame)
+
 
 function connectFour(board) {
     var emptyCounter=0;
@@ -72,43 +66,95 @@ var initialBoard=[ [ '-', '-', '-', '-', '-', '-', '-' ],
 var keepPlaying=true;
 var turnTracker=0;
     $(".circle").click(function (x) {
-        var column = $(this).attr('class')[7];
-        var row=$(this).parent().attr('class')[5]
-        var spotOpen=true;
-        if (row!==6) {
-            for (let i = row; i < initialBoard.length; i++) {
-                if (initialBoard[i][column-1] === "-") {
-                    spotOpen = false;
+        if ($(this).hasClass("no-clicking")===false) {
+            var column = $(this).attr('class')[7];
+            var row = $(this).parent().attr('class')[5]
+            var spotOpen = true;
+            if (row !== 6) {
+                for (let i = row; i < initialBoard.length; i++) {
+                    if (initialBoard[i][column - 1] === "-") {
+                        spotOpen = false;
+                    }
                 }
             }
-        }
-        //This will update board to show latest chip added and will update our array of values.
-        if (spotOpen && initialBoard[row-1][column-1]==="-") {
-            if (turnTracker % 2 === 0) {
-                $(this).css("background-color", "red")
-                initialBoard[row-1][column-1]="R";
-                $("#turn-tracker").html("Yellow Player's Turn")
-                $("#turn-tracker").css("color", "yellow")
+            //This will update board to show latest chip added and will update our array of values.
+            if (spotOpen && initialBoard[row - 1][column - 1] === "-") {
+                if (turnTracker % 2 === 0) {
+                    $(this).children().css("background-color", "red")
+                    $(this).children().css({
+                        "transition-property": "transform",
+                        "transition-duration": "1s",
+                        "transition-timing-function": "linear",
+                        "transition-delay": "100ms"
+                    })
+                    $(this).children().css("transform", "translate(0, 500px)")
 
-            } else {
-                $(this).css("background-color", "yellow")
-                initialBoard[row-1][column-1]="Y";
-                $("#turn-tracker").html("Red Player's Turn")
-                $("#turn-tracker").css("color", "red")
+                    // $(this).css("background-color", "red")
+                    initialBoard[row - 1][column - 1] = "R";
+                    $("#turn-tracker").html("Yellow Player's Turn")
+                    $("#turn-tracker").css("color", "#cece10")
+                    $("#turn-tracker").css("left", "unset")
+                    $("#turn-tracker").css("right", "25px")
+
+
+                } else {
+                    $(this).children().css("background-color", "yellow")
+                    $(this).children().css({
+                        "transition-property": "transform",
+                        "transition-duration": "1s",
+                        "transition-timing-function": "linear",
+                        "transition-delay": "100ms"
+                    })
+                    $(this).children().css("transform", "translate(0, 500px)")
+                    initialBoard[row - 1][column - 1] = "Y";
+                    $("#turn-tracker").html("Red Player's Turn")
+                    $("#turn-tracker").css("color", "red")
+                    $("#turn-tracker").css("right", "unset")
+                    $("#turn-tracker").css("left", "25px")
+
+                }
+
+                turnTracker++
             }
+            //This will check our array of values to see if there is a winner yet.
+            var gameProgress = connectFour(initialBoard);
+            if (gameProgress === "R") {
+                $("#new-game").html("Red Team wins! Want to play again?<br>" +
+                    "<button id='yes'>Yes</button>")
+                $("#new-game").show()
+                $("#turn-tracker").hide()
+                $(".circle").addClass("no-clicking")
 
-            turnTracker++
-        }
-        //This will check our array of values to see if there is a winner yet.
-        var gameProgress=connectFour(initialBoard);
-        if (gameProgress==="R"){
-            alert("Red Team Wins!")
-        } else if(gameProgress==="Y"){
-            alert("Yellow Team Wins!")
-        } else if(gameProgress==="draw"){
-            alert("Booooo its a tie.")
+
+            } else if (gameProgress === "Y") {
+                $("#new-game").html("Yellow Team wins! Want to play again?<br>" +
+                    "<button id='yes'>Yes</button>")
+                $("#new-game").show()
+                $("#turn-tracker").hide()
+                $(".circle").addClass("no-clicking")
+
+
+            } else if (gameProgress === "draw") {
+                $("#new-game").html("Boooo its a tie! Want to play again?<br>" +
+                    "<button id='yes'>Yes</button>")
+                $("#new-game").show()
+                $("#turn-tracker").hide()
+                $(".circle").addClass("no-clicking")
+            }
         }
 
 
 
     })
+$(document).on('click','#yes',function(){
+    $(".circle").removeClass("no-clicking")
+    initialBoard=[ [ '-', '-', '-', '-', '-', '-', '-' ],
+        [ '-', '-', '-', '-', '-', '-', '-' ],
+        [ '-', '-', '-', '-', '-', '-', '-' ],
+        [ '-', '-', '-', '-', '-', '-', '-' ],
+        [ '-', '-', '-', '-', '-', '-', '-' ],
+        [ '-', '-', '-', '-', '-', '-', '-' ] ]
+    $(".color").css("transform", "translate(0, -500px)")
+    $("#new-game").hide()
+    $("#turn-tracker").show()
+})
