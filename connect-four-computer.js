@@ -365,7 +365,7 @@ function checkComputersMove(board, row, column){
 
         //now will check to see what our best move is.
         var streakTracker=[0,0];
-        var bestMove=[0,0]
+        var bestMove=[]
         for (let i=0; i< board.length; i++){
             for (let j=0; j<board[i].length; j++){
                 //will only consider move if it is a valid move.
@@ -377,13 +377,12 @@ function checkComputersMove(board, row, column){
                if (board[i][j]==="-"&&(i===5 || board[i+1][j]!=="-" )){
 
                    //first will check number of vertical streak.
-                   if (i>0) {
-                       while (board[i - 1][j] === "Y") {
+                   if (i<5) {
+                       while (board[i + 1][j] === "Y") {
                            currentTotal++
-
-                           totalStreak++;
-                           if (i>1) {
-                               i--;
+                           totalStreak++
+                           if (i<4){
+                               i++;
                            } else{
                                break;
                            }
@@ -521,19 +520,26 @@ function checkComputersMove(board, row, column){
                    //We will now check and see if this is our best move so far.
                    if (checkComputersMove(board, currentRow, currentColumn)){
                        continue;
-                   } else if (highestTotal>streakTracker[0]){
-                       bestMove=[i,j];
+                   } else if(highestTotal>streakTracker[0]){
+                       bestMove=[[i,j]];
                        streakTracker=[highestTotal, totalStreak]
                    } else if (highestTotal===streakTracker[0]){
-                       if (totalStreak>=streakTracker[1]){
-                           bestMove=[i,j];
+                       if (totalStreak>streakTracker[1]){
+                           bestMove=[[i,j]];
                            streakTracker=[highestTotal, totalStreak]
+                       } else if (totalStreak===streakTracker[1]){
+                           bestMove.push([i,j])
                        }
                    }
                }
             }
         }
-        return bestMove;
+        if (bestMove.length===1){
+            return bestMove[0]
+        } else{
+            var randomIndex=Math.round(Math.random()*(bestMove.length-1))
+            return bestMove[randomIndex]
+        }
     }
 
     //This will be our defensive computer strategy. It will always try to block the highest streak the
@@ -551,7 +557,7 @@ function computersMoveDefense(board){
 
     //now will check to see what our best move to block the player is.
     var streakTracker=[0,0];
-    var bestMove=[0,0]
+    var bestMove=[]
     for (let i=0; i< board.length; i++){
         for (let j=0; j<board[i].length; j++){
             //will only consider move if it is a valid move.
@@ -563,13 +569,12 @@ function computersMoveDefense(board){
             if (board[i][j]==="-"&&(i===5 || board[i+1][j]!=="-" )){
 
                 //first will check number of vertical streak.
-                if (i>0) {
-                    while (board[i - 1][j] === "R") {
+                if (i<5) {
+                    while (board[i + 1][j] === "R") {
                         currentTotal++
-
-                        totalStreak++;
-                        if (i>1) {
-                            i--;
+                        totalStreak++
+                        if (i<4){
+                            i++;
                         } else{
                             break;
                         }
@@ -708,18 +713,27 @@ function computersMoveDefense(board){
                 if (checkComputersMove(board, currentRow, currentColumn)){
                     continue;
                 } else if(highestTotal>streakTracker[0]){
-                    bestMove=[i,j];
+                    bestMove=[[i,j]];
                     streakTracker=[highestTotal, totalStreak]
                 } else if (highestTotal===streakTracker[0]){
-                    if (totalStreak>=streakTracker[1]){
-                        bestMove=[i,j];
+                    if (totalStreak>streakTracker[1]){
+                        bestMove=[[i,j]];
                         streakTracker=[highestTotal, totalStreak]
+                    } else if (totalStreak===streakTracker[1]){
+                        bestMove.push([i,j])
                     }
                 }
             }
         }
     }
-    return bestMove;
+    //If there is one clear best move, the computer will choose that one.
+    if (bestMove.length===1){
+        return bestMove[0]
+    } else{
+        //If there are multiple moves that are equally advantageous for the computer, one will be randomly chosen.
+        var randomIndex=Math.round(Math.random()*(bestMove.length-1))
+        return bestMove[randomIndex]
+    }
 }
 
 
