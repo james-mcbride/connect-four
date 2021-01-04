@@ -6,6 +6,110 @@ var centerTurnTracker=(windowWidth-178)/2
 
 //will check to see if computer has winning move. This will have to be executed before checking to see if player has winning move
 //that needs to be blocked
+
+function verticalWinningPotential(board,row,column,color){
+    var currentRow=row;
+    var currentColumn=column;
+    let count=1;
+    while (row<=4){
+        if (board[row+1][column]===color){
+            count++
+            row++
+        } else {
+            break;
+        }
+    }
+    row=currentRow;
+    column=currentColumn;
+    while (row>=1){
+        if (board[row-1][column]==="-"){
+            count++
+            row--
+        } else {
+            break;
+        }
+    }
+    return count;
+}
+function horizontalWinningPotential(board,row,column,color){
+    var currentRow=row;
+    var currentColumn=column;
+    let count=1;
+    while (column<=5){
+        if (board[row][column+1]===color||board[row][column+1]==="-"){
+            count++
+            column++
+        } else {
+            break;
+        }
+    }
+    row=currentRow;
+    column=currentColumn;
+    while (column>=1){
+        if (board[row][column-1]===color||board[row][column-1]==="-"){
+            count++
+            column--
+        } else {
+            break;
+        }
+    }
+    return count;
+}
+
+function upwardDiagonalWinningPotential(board,row,column,color){
+    var currentRow=row;
+    var currentColumn=column;
+    let count=1;
+    while (column<=5 && row>=1){
+        if (board[row-1][column+1]===color||board[row-1][column+1]==="-"){
+            count++
+            column++
+            row--
+        } else {
+            break;
+        }
+    }
+    row=currentRow;
+    column=currentColumn;
+    while (column>=1 && row<=4){
+        if (board[row+1][column-1]===color||board[row+1][column-1]==="-"){
+            count++
+            row++
+            column--
+        } else {
+            break;
+        }
+    }
+    return count;
+}
+
+function downwardDiagonalWinningPotential(board,row,column,color){
+    var currentRow=row;
+    var currentColumn=column;
+    let count=1;
+    while (column<=5 && row<=4){
+        if (board[row+1][column+1]===color||board[row+1][column+1]==="-"){
+            count++
+            column++
+            row++
+        } else {
+            break;
+        }
+    }
+    row=currentRow;
+    column=currentColumn;
+    while (column>=1 && row>=1){
+        if (board[row-1][column-1]===color||board[row-1][column-1]==="-"){
+            count++
+            row--
+            column--
+        } else {
+            break;
+        }
+    }
+    return count;
+}
+
 function computerWinningMove (board){
     for (let i=0; i< board.length; i++){
         for (let j=0; j<board[i].length; j++){
@@ -388,7 +492,7 @@ function checkComputersMove(board, row, column){
                            }
                        }
                    }
-                   if(currentTotal>highestTotal){
+                   if(currentTotal>highestTotal && verticalWinningPotential(board, currentRow, currentColumn, "Y")>=4){
                        highestTotal=currentTotal;
                        currentTotal=0;
                        i=currentRow;
@@ -398,7 +502,6 @@ function checkComputersMove(board, row, column){
                    }
 
                    //next, will check number of horizontal streak.
-
                    //will check total to the right first.
                    if (j<6) {
                        while (board[i][j + 1] === "Y") {
@@ -426,7 +529,7 @@ function checkComputersMove(board, row, column){
 
                        }
                    }
-                   if(currentTotal>highestTotal){
+                   if(currentTotal>highestTotal && horizontalWinningPotential(board, currentRow, currentColumn, "Y")>=4){
                        highestTotal=currentTotal;
                        currentTotal=0;
                        j=currentColumn
@@ -435,7 +538,7 @@ function checkComputersMove(board, row, column){
                        j=currentColumn
                    }
 
-                   //next will check downwards diagonal
+                   //next will check upwards diagonal
                    //first will check to the right
                    if (i>0&&j<6) {
                        while (board[i - 1][j + 1] === "Y") {
@@ -465,7 +568,7 @@ function checkComputersMove(board, row, column){
                            }
                        }
                    }
-                   if(currentTotal>highestTotal){
+                   if(currentTotal>highestTotal && upwardDiagonalWinningPotential(board, currentRow, currentColumn, "Y")>=4){
                        highestTotal=currentTotal;
                        currentTotal=0;
                        i=currentRow
@@ -476,7 +579,7 @@ function checkComputersMove(board, row, column){
                        j=currentColumn
                    }
 
-                   //next will check upwards diagonal
+                   //next will check downwards diagonal
                    //first will check to the right
                    if (i<5&&j<6) {
                        while (board[i + 1][j + 1] === "Y") {
@@ -505,7 +608,7 @@ function checkComputersMove(board, row, column){
                            }
                        }
                    }
-                   if(currentTotal>highestTotal){
+                   if(currentTotal>highestTotal  && downwardDiagonalWinningPotential(board, currentRow, currentColumn, "Y")>=4){
                        highestTotal=currentTotal;
                        currentTotal=0;
                        i=currentRow
@@ -569,6 +672,7 @@ function computersMoveDefense(board){
             if (board[i][j]==="-"&&(i===5 || board[i+1][j]!=="-" )){
 
                 //first will check number of vertical streak.
+                // console.log(verticalWinningPotential(board, i, j, "R"))
                 if (i<5) {
                     while (board[i + 1][j] === "R") {
                         currentTotal++
@@ -580,7 +684,7 @@ function computersMoveDefense(board){
                         }
                     }
                 }
-                if(currentTotal>highestTotal){
+                if(currentTotal>highestTotal && verticalWinningPotential(board, currentRow, currentColumn, "R")>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     i=currentRow;
@@ -618,7 +722,7 @@ function computersMoveDefense(board){
 
                     }
                 }
-                if(currentTotal>highestTotal){
+                if(currentTotal>highestTotal && horizontalWinningPotential(board, currentRow, currentColumn, "R")>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     j=currentColumn
@@ -627,7 +731,7 @@ function computersMoveDefense(board){
                     j=currentColumn
                 }
 
-                //next will check downwards diagonal
+                //next will check upwards diagonal
                 //first will check to the right
                 if (i>0&&j<6) {
                     while (board[i - 1][j + 1] === "R") {
@@ -657,7 +761,7 @@ function computersMoveDefense(board){
                         }
                     }
                 }
-                if(currentTotal>highestTotal){
+                if(currentTotal>highestTotal && upwardDiagonalWinningPotential(board, currentRow, currentColumn, "R")>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     i=currentRow
@@ -668,7 +772,7 @@ function computersMoveDefense(board){
                     j=currentColumn
                 }
 
-                //next will check upwards diagonal
+                //next will check downwards diagonal
                 //first will check to the right
                 if (i<5&&j<6) {
                     while (board[i + 1][j + 1] === "R") {
@@ -697,7 +801,7 @@ function computersMoveDefense(board){
                         }
                     }
                 }
-                if(currentTotal>highestTotal){
+                if(currentTotal>highestTotal && downwardDiagonalWinningPotential(board, currentRow, currentColumn, "R")>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     i=currentRow
@@ -823,7 +927,6 @@ $(".circle").click(function (x) {
         }
         var computerPlayChildClass="."+(computerPlay[1]+1);
         var computerPlayParentClass="."+(computerPlay[0]+1);
-        console.log(computerPlayParentClass)
         var element = $(computerPlayChildClass, computerPlayParentClass);
         $(element).children().css("background-color", "yellow")
         $(element).children().css({
