@@ -2,7 +2,7 @@ var windowWidth= window.innerWidth
 var centerNewGame=(windowWidth-754)/2
 $("#new-game").css("left", centerNewGame)
 var centerTurnTracker=(windowWidth-178)/2
- $("#turn-tracker").css("left", centerTurnTracker )
+ // $("#turn-tracker").css("left", centerTurnTracker )
 
 //will check to see if computer has winning move. This will have to be executed before checking to see if player has winning move
 //that needs to be blocked
@@ -456,15 +456,15 @@ function checkComputersMove(board, row, column){
     //This is our offensive computer strategy. It will first check and stop the player if they are about to win,
     // then it will focus on picking the move that gives it the best chance of winning.
 
-    function computersMove(board){
+    function computersMoveOffense(board){
         //this function will check to see if the computer has a winning move that it needs to execute.
         if (computerWinningMove(board)){
-            return computerWinningMove(board)
+            return [computerWinningMove(board), [1,0]]
         }
 
         //This function will check to see if the player has a three streak winning move, and will block it if so.
         if (blockPlayersWinningMove(board)){
-            return blockPlayersWinningMove(board)
+            return [blockPlayersWinningMove(board), [1,0]]
         }
 
         //now will check to see what our best move is.
@@ -638,10 +638,10 @@ function checkComputersMove(board, row, column){
             }
         }
         if (bestMove.length===1){
-            return bestMove[0]
+            return [bestMove[0], streakTracker]
         } else{
             var randomIndex=Math.round(Math.random()*(bestMove.length-1))
-            return bestMove[randomIndex]
+            return [bestMove[randomIndex], streakTracker]
         }
     }
 
@@ -651,11 +651,11 @@ function computersMoveDefense(board){
 
     //this function will check to see if the computer has a winning move that it needs to execute.
     if (computerWinningMove(board)){
-        return computerWinningMove(board)
+        return [computerWinningMove(board), [0,0]]
     }
     //this function will check to see if the player has a three streak winning move that needs to be blocked.
     if (blockPlayersWinningMove(board)){
-        return blockPlayersWinningMove(board)
+        return [blockPlayersWinningMove(board), [0,0]]
     }
 
     //now will check to see what our best move to block the player is.
@@ -832,11 +832,11 @@ function computersMoveDefense(board){
     }
     //If there is one clear best move, the computer will choose that one.
     if (bestMove.length===1){
-        return bestMove[0]
+        return [bestMove[0], streakTracker]
     } else{
         //If there are multiple moves that are equally advantageous for the computer, one will be randomly chosen.
         var randomIndex=Math.round(Math.random()*(bestMove.length-1))
-        return bestMove[randomIndex]
+        return [bestMove[randomIndex], streakTracker]
     }
 }
 
@@ -891,7 +891,7 @@ $(".circle").click(function (x) {
         }
         //will check for a winner after you play.
 
-        var gameProgress = connectFour(initialBoard);
+        gameProgress = connectFour(initialBoard);
         if (gameProgress === "R") {
             $("#new-game").html("Red Team wins! Want to play again?<br>" +
                 "<button id='yes'>Yes</button>")
@@ -919,12 +919,29 @@ $(".circle").click(function (x) {
         //if no winner, the computer will do there play.
 
         //This random function will randomly alternate between an offensive and defensive strategy.
-        var randomMove=Math.round(Math.random())
-        if(randomMove===0) {
-            var computerPlay = computersMove(initialBoard);
+        // var randomMove=Math.round(Math.random())
+        // if(randomMove===0) {
+        //     var computerPlay = computersMoveOffense(initialBoard);
+        // } else{
+        //     computerPlay=computersMoveDefense(initialBoard)
+        // }
+
+        //This will check the board and see if offense or defense is more adventageous right now.
+        var offenseCheck=computersMoveOffense(initialBoard)
+        var defenseCheck=computersMoveDefense(initialBoard)
+
+        if (offenseCheck[1[0]>defenseCheck[1][0]]){
+            var computerPlay=offenseCheck[0];
+        } else if(offenseCheck[1[0]<defenseCheck[1][0]]){
+            computerPlay=defenseCheck[0]
+        } else if (offenseCheck[1[1]>defenseCheck[1][1]]){
+            computerPlay=offenseCheck[0];
         } else{
-            computerPlay=computersMoveDefense(initialBoard)
+            computerPlay=defenseCheck[0]
         }
+        console.log(offenseCheck)
+        console.log(defenseCheck)
+        console.log(computerPlay)
         var computerPlayChildClass="."+(computerPlay[1]+1);
         var computerPlayParentClass="."+(computerPlay[0]+1);
         var element = $(computerPlayChildClass, computerPlayParentClass);
