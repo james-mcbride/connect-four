@@ -1,7 +1,6 @@
 var windowWidth= window.innerWidth
-var centerNewGame=(windowWidth-754)/2
-$("#new-game").css("left", centerNewGame)
 var centerTurnTracker=(windowWidth-178)/2
+var newGameWidth=(windowWidth*3/4)
  // $("#turn-tracker").css("left", centerTurnTracker )
 
 //will check to see if computer has winning move. This will have to be executed before checking to see if player has winning move
@@ -849,7 +848,7 @@ var initialBoard=[ [ '-', '-', '-', '-', '-', '-', '-' ],
     [ '-', '-', '-', '-', '-', '-', '-' ],
     [ '-', '-', '-', '-', '-', '-', '-' ] ]
 var keepPlaying=true;
-var turnTracker=0;
+var gameTracker=0;
 $(".circle").click(function (x) {
     if ($(this).hasClass("no-clicking")===false) {
         var column = $(this).attr('class')[7];
@@ -879,7 +878,7 @@ $(".circle").click(function (x) {
                 "transition-timing-function": "linear",
                 "transition-delay": "100ms"
             })
-            $(this).children().css("transform", "translate(0, 500px)")
+            $(this).children().css("transform", "translate(0, 1000px)")
 
             // $(this).css("background-color", "red")
             initialBoard[row - 1][column - 1] = "R";
@@ -895,25 +894,37 @@ $(".circle").click(function (x) {
             if (gameProgress === "R") {
                 $("#new-game").html("Red Team wins! Want to play again?<br>" +
                     "<button id='yes'>Yes</button>")
-                $("#new-game").show()
-                $("#turn-tracker").hide()
+                $("#new-game").toggleClass("hidden")
+                $("#turn-tracker").toggleClass("hidden")
                 $(".circle").addClass("no-clicking")
+                gameProgess=""
+                var playerScore = Number($("#player").html())
+                playerScore++
+                $("#player").html(playerScore)
 
 
             } else if (gameProgress === "Y") {
                 $("#new-game").html("Yellow Team wins! Want to play again?<br>" +
                     "<button id='yes'>Yes</button>")
-                $("#new-game").show()
-                $("#turn-tracker").hide()
+                $("#new-game").toggleClass("hidden")
+                $("#turn-tracker").toggleClass("hidden")
                 $(".circle").addClass("no-clicking")
+                gameProgess=""
+                var computerScore = Number($("#computer").html())
+                computerScore++
+                $("#computer").html(computerScore)
 
 
             } else if (gameProgress === "draw") {
                 $("#new-game").html("Boooo its a tie! Want to play again?<br>" +
                     "<button id='yes'>Yes</button>")
-                $("#new-game").show()
-                $("#turn-tracker").hide()
+                $("#new-game").toggleClass("hidden")
+                $("#turn-tracker").toggleClass("hidden")
                 $(".circle").addClass("no-clicking")
+                gameProgess=""
+                var drawScore = Number($("#draw").html())
+                drawScore++
+                $("#draw").html(drawScore)
             }
 
             //if no winner, the computer will do there play.
@@ -930,14 +941,21 @@ $(".circle").click(function (x) {
             var offenseCheck = computersMoveOffense(initialBoard)
             var defenseCheck = computersMoveDefense(initialBoard)
 
-            if (offenseCheck[1[0] > defenseCheck[1][0]]) {
+            if (offenseCheck[1][0] > defenseCheck[1][0]) {
                 var computerPlay = offenseCheck[0];
-            } else if (offenseCheck[1[0] < defenseCheck[1][0]]) {
+            } else if (offenseCheck[1][0] < defenseCheck[1][0]) {
                 computerPlay = defenseCheck[0]
-            } else if (offenseCheck[1[1] > defenseCheck[1][1]]) {
+            } else if (offenseCheck[1][1] > defenseCheck[1][1]) {
                 computerPlay = offenseCheck[0];
-            } else {
+            } else if(offenseCheck[1][1] < defenseCheck[1][1]) {
                 computerPlay = defenseCheck[0]
+            } else{
+                let randomMove=Math.round(Math.random())
+                if(randomMove===0) {
+                    computerPlay = offenseCheck[0]
+                } else{
+                    computerPlay = defenseCheck[0]
+                }
             }
             console.log(offenseCheck)
             console.log(defenseCheck)
@@ -950,9 +968,9 @@ $(".circle").click(function (x) {
                 "transition-property": "transform",
                 "transition-duration": "1s",
                 "transition-timing-function": "linear",
-                "transition-delay": "1000ms"
+                "transition-delay": "1500ms"
             })
-            $(element).children().css("transform", "translate(0, 500px)")
+            $(element).children().css("transform", "translate(0, 1000px)")
             initialBoard[computerPlay[0]][computerPlay[1]] = "Y";
             $("#turn-tracker").html("Your turn!")
             $("#turn-tracker").css("color", "red")
@@ -960,38 +978,41 @@ $(".circle").click(function (x) {
             $("#turn-tracker").css("left", centerTurnTracker)
 
             //This will check our array of values to see if there is a winner yet.
-            var gameProgress = connectFour(initialBoard);
-            if (gameProgress === "R") {
-                $("#new-game").html("You won! Want to play again?<br>" +
-                    "<button id='yes'>Yes</button>")
-                $("#new-game").show()
-                $("#header").hide()
-                $(".circle").addClass("no-clicking")
-                var playerScore = Number($("#player").html())
-                playerScore++
-                $("#player").html(playerScore)
+            var gameOver= $("#new-game").hasClass("hidden")
+            if (gameOver===true) {
+                var gameProgress = connectFour(initialBoard);
+                if (gameProgress === "R") {
+                    $("#new-game").html("You won! Want to play again?  " +
+                        "<button id='yes'>Yes</button>")
+                    $("#new-game").toggleClass("hidden")
+                    $("#turn-tracker").toggleClass("hidden")
+                    $(".circle").addClass("no-clicking")
+                    var playerScore = Number($("#player").html())
+                    playerScore++
+                    $("#player").html(playerScore)
 
 
-            } else if (gameProgress === "Y") {
-                $("#new-game").html("The computer won! Want to play again?<br>" +
-                    "<button id='yes'>Yes</button>")
-                $("#new-game").show()
-                $("#header").hide()
-                $(".circle").addClass("no-clicking")
-                var computerScore = Number($("#computer").html())
-                computerScore++
-                $("#computer").html(computerScore)
+                } else if (gameProgress === "Y") {
+                    $("#new-game").html("The computer won! Want to play again?  " +
+                        "<button id='yes'>Yes</button>")
+                    $("#new-game").toggleClass("hidden")
+                    $("#turn-tracker").toggleClass("hidden")
+                    $(".circle").addClass("no-clicking")
+                    var computerScore = Number($("#computer").html())
+                    computerScore++
+                    $("#computer").html(computerScore)
 
 
-            } else if (gameProgress === "draw") {
-                $("#new-game").html("Boooo its a tie! Want to play again?<br>" +
-                    "<button id='yes'>Yes</button>")
-                $("#new-game").show()
-                $("#header").hide()
-                $(".circle").addClass("no-clicking")
-                var drawScore = Number($("#draw").html())
-                drawScore++
-                $("#draw").html(drawScore)
+                } else if (gameProgress === "draw") {
+                    $("#new-game").html("Boooo its a tie! Want to play again?  " +
+                        "<button id='yes'>Yes</button>")
+                    $("#new-game").toggleClass("hidden")
+                    $("#turn-tracker").toggleClass("hidden")
+                    $(".circle").addClass("no-clicking")
+                    var drawScore = Number($("#draw").html())
+                    drawScore++
+                    $("#draw").html(drawScore)
+                }
             }
         }
     }
@@ -1007,7 +1028,35 @@ $(document).on('click','#yes',function(){
         [ '-', '-', '-', '-', '-', '-', '-' ],
         [ '-', '-', '-', '-', '-', '-', '-' ],
         [ '-', '-', '-', '-', '-', '-', '-' ] ]
-    $(".color").css("transform", "translate(0, -500px)")
-    $("#new-game").hide()
-    $("#header").show()
+    $(".color").css("transform", "translate(0, -1000px)")
+    $("#new-game").toggleClass("hidden")
+    $("#turn-tracker").toggleClass("hidden")
+    gameTracker++;
+    if (gameTracker%2===1){
+        //This will check the board and see if offense or defense is more adventageous right now.
+        var offenseCheck = computersMoveOffense(initialBoard)
+        var defenseCheck = computersMoveDefense(initialBoard)
+
+        if (offenseCheck[1[0] > defenseCheck[1][0]]) {
+            var computerPlay = offenseCheck[0];
+        } else if (offenseCheck[1[0] < defenseCheck[1][0]]) {
+            computerPlay = defenseCheck[0]
+        } else if (offenseCheck[1[1] > defenseCheck[1][1]]) {
+            computerPlay = offenseCheck[0];
+        } else {
+            computerPlay = defenseCheck[0]
+        }
+        var computerPlayChildClass = "." + (computerPlay[1] + 1);
+        var computerPlayParentClass = "." + (computerPlay[0] + 1);
+        var element = $(computerPlayChildClass, computerPlayParentClass);
+        $(element).children().css("background-color", "yellow")
+        $(element).children().css({
+            "transition-property": "transform",
+            "transition-duration": "1s",
+            "transition-timing-function": "linear",
+            "transition-delay": "1000ms"
+        })
+        $(element).children().css("transform", "translate(0, 1000px)")
+        initialBoard[computerPlay[0]][computerPlay[1]] = "Y";
+    }
 })
