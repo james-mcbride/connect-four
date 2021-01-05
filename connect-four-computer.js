@@ -853,32 +853,50 @@ $(".circle").click(function (x) {
     if ($(this).hasClass("no-clicking")===false) {
         var column = $(this).attr('class')[7];
         var row = $(this).parent().attr('class')[5]
-        var spotOpen = true;
+        // var spotOpen = true;
 
         //this will automatically stop the rest of the functions from stopping if an already filled
         //spot is chosen
-        if (initialBoard[row - 1][column - 1] !== "-") {
-            return;
-        }
+        // if (initialBoard[row - 1][column - 1] !== "-") {
+        //     return;
+        // }
 
         //This will check to make sure all spots beneath the chosen spot are already filled.
-        if (row !== 6) {
-            for (let i = row; i < initialBoard.length; i++) {
-                if (initialBoard[i][column - 1] === "-") {
-                    spotOpen = false;
+        // if (row !== 6) {
+        //     for (let i = row; i < initialBoard.length; i++) {
+        //         if (initialBoard[i][column - 1] === "-") {
+        //             spotOpen = false;
+        //         }
+        //     }
+        // }
+
+        if (row != 6) {
+            for (let i = row-1; i < initialBoard.length; i++) {
+                if (i===5){
+                    row=i+1;
+                    break;
+                }else if (initialBoard[i+1][column-1] === "-") {
+                } else{
+                    row=i+1;
+                    break;
                 }
             }
         }
+
+        var playerPlayChildClass = "." + column;
+        var playerPlayParentClass = "." + row;
+        var player = $(playerPlayChildClass, playerPlayParentClass);
+
         //This will update board to show latest chip added and will update our array of values.
-        if (spotOpen && initialBoard[row - 1][column - 1] === "-") {
-            $(this).children().css("background-color", "red")
-            $(this).children().css({
+        if (initialBoard[row - 1][column - 1] === "-") {
+            $(player).children().css("background-color", "red")
+            $(player).children().css({
                 "transition-property": "transform",
                 "transition-duration": "1s",
                 "transition-timing-function": "linear",
                 "transition-delay": "100ms"
             })
-            $(this).children().css("transform", "translate(0, 1000px)")
+            $(player).children().css("transform", "translate(0, 1000px)")
 
             // $(this).css("background-color", "red")
             initialBoard[row - 1][column - 1] = "R";
