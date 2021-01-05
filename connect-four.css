@@ -6,7 +6,7 @@ html, body{
 .row{
     width: 80%;
     height: 70%;
-    margin:  5% 10%;
+    margin:  5% 5%;
     min-width: 400px;
     max-width: 1000px;
     min-height: 350px;
@@ -29,11 +29,11 @@ html, body{
     border-radius: 50%
 }
 #turn-tracker{
-    position: relative;
-    top: 25px;
-    left: 25px;
     font-size: x-large;
     color: red;
+    width: 100px;
+    height: 50px;
+
 }
 .color{
     width: 100%;
@@ -54,15 +54,24 @@ html, body{
 
 #score-keeper{
     text-align: center;
-    position: relative;
     width: 100px;
-    height: 100px;
+    height: 50px;
     z-index: 1000;
-    min-width: 0;
-    max-width: 0;
     color: black;
-    left: 100px;
 }
 .grid{
-    float: left;
+    border: 2px black solid;
+    justify-content: center;
+    width: 100px;
+
+}
+#header{
+    display: flex;
+    height: 50px;
+    justify-content: space-evenly;
+}
+.score{
+    display: flex;
+    width: 200px;
+
 }

@@ -858,7 +858,7 @@ $(".circle").click(function (x) {
 
         //this will automatically stop the rest of the functions from stopping if an already filled
         //spot is chosen
-        if(initialBoard[row - 1][column - 1] !== "-"){
+        if (initialBoard[row - 1][column - 1] !== "-") {
             return;
         }
 
@@ -872,117 +872,127 @@ $(".circle").click(function (x) {
         }
         //This will update board to show latest chip added and will update our array of values.
         if (spotOpen && initialBoard[row - 1][column - 1] === "-") {
-                $(this).children().css("background-color", "red")
-                $(this).children().css({
-                    "transition-property": "transform",
-                    "transition-duration": "1s",
-                    "transition-timing-function": "linear",
-                    "transition-delay": "100ms"
-                })
-                $(this).children().css("transform", "translate(0, 500px)")
+            $(this).children().css("background-color", "red")
+            $(this).children().css({
+                "transition-property": "transform",
+                "transition-duration": "1s",
+                "transition-timing-function": "linear",
+                "transition-delay": "100ms"
+            })
+            $(this).children().css("transform", "translate(0, 500px)")
 
-                // $(this).css("background-color", "red")
-                initialBoard[row - 1][column - 1] = "R";
-                $("#turn-tracker").html("Yellow Player's Turn")
-                $("#turn-tracker").css("color", "#cece10")
-                $("#turn-tracker").css("left", "unset")
-                $("#turn-tracker").css("right", "25px")
-
-        }
-        //will check for a winner after you play.
-
-        gameProgress = connectFour(initialBoard);
-        if (gameProgress === "R") {
-            $("#new-game").html("Red Team wins! Want to play again?<br>" +
-                "<button id='yes'>Yes</button>")
-            $("#new-game").show()
-            $("#turn-tracker").hide()
-            $(".circle").addClass("no-clicking")
+            // $(this).css("background-color", "red")
+            initialBoard[row - 1][column - 1] = "R";
+            $("#turn-tracker").html("Yellow Player's Turn")
+            $("#turn-tracker").css("color", "#cece10")
+            $("#turn-tracker").css("left", "unset")
+            $("#turn-tracker").css("right", "25px")
 
 
-        } else if (gameProgress === "Y") {
-            $("#new-game").html("Yellow Team wins! Want to play again?<br>" +
-                "<button id='yes'>Yes</button>")
-            $("#new-game").show()
-            $("#turn-tracker").hide()
-            $(".circle").addClass("no-clicking")
+            //will check for a winner after you play.
+
+            gameProgress = connectFour(initialBoard);
+            if (gameProgress === "R") {
+                $("#new-game").html("Red Team wins! Want to play again?<br>" +
+                    "<button id='yes'>Yes</button>")
+                $("#new-game").show()
+                $("#turn-tracker").hide()
+                $(".circle").addClass("no-clicking")
 
 
-        } else if (gameProgress === "draw") {
-            $("#new-game").html("Boooo its a tie! Want to play again?<br>" +
-                "<button id='yes'>Yes</button>")
-            $("#new-game").show()
-            $("#turn-tracker").hide()
-            $(".circle").addClass("no-clicking")
-        }
-
-        //if no winner, the computer will do there play.
-
-        //This random function will randomly alternate between an offensive and defensive strategy.
-        // var randomMove=Math.round(Math.random())
-        // if(randomMove===0) {
-        //     var computerPlay = computersMoveOffense(initialBoard);
-        // } else{
-        //     computerPlay=computersMoveDefense(initialBoard)
-        // }
-
-        //This will check the board and see if offense or defense is more adventageous right now.
-        var offenseCheck=computersMoveOffense(initialBoard)
-        var defenseCheck=computersMoveDefense(initialBoard)
-
-        if (offenseCheck[1[0]>defenseCheck[1][0]]){
-            var computerPlay=offenseCheck[0];
-        } else if(offenseCheck[1[0]<defenseCheck[1][0]]){
-            computerPlay=defenseCheck[0]
-        } else if (offenseCheck[1[1]>defenseCheck[1][1]]){
-            computerPlay=offenseCheck[0];
-        } else{
-            computerPlay=defenseCheck[0]
-        }
-        console.log(offenseCheck)
-        console.log(defenseCheck)
-        console.log(computerPlay)
-        var computerPlayChildClass="."+(computerPlay[1]+1);
-        var computerPlayParentClass="."+(computerPlay[0]+1);
-        var element = $(computerPlayChildClass, computerPlayParentClass);
-        $(element).children().css("background-color", "yellow")
-        $(element).children().css({
-            "transition-property": "transform",
-            "transition-duration": "1s",
-            "transition-timing-function": "linear",
-            "transition-delay": "1000ms"
-        })
-        $(element).children().css("transform", "translate(0, 500px)")
-        initialBoard[computerPlay[0]][computerPlay[1]] = "Y";
-        $("#turn-tracker").html("Your turn!")
-        $("#turn-tracker").css("color", "red")
-        $("#turn-tracker").css("right", "unset")
-        $("#turn-tracker").css("left", centerTurnTracker)
-
-        //This will check our array of values to see if there is a winner yet.
-        var gameProgress = connectFour(initialBoard);
-        if (gameProgress === "R") {
-            $("#new-game").html("Red Team wins! Want to play again?<br>" +
-                "<button id='yes'>Yes</button>")
-            $("#new-game").show()
-            $("#turn-tracker").hide()
-            $(".circle").addClass("no-clicking")
+            } else if (gameProgress === "Y") {
+                $("#new-game").html("Yellow Team wins! Want to play again?<br>" +
+                    "<button id='yes'>Yes</button>")
+                $("#new-game").show()
+                $("#turn-tracker").hide()
+                $(".circle").addClass("no-clicking")
 
 
-        } else if (gameProgress === "Y") {
-            $("#new-game").html("Yellow Team wins! Want to play again?<br>" +
-                "<button id='yes'>Yes</button>")
-            $("#new-game").show()
-            $("#turn-tracker").hide()
-            $(".circle").addClass("no-clicking")
+            } else if (gameProgress === "draw") {
+                $("#new-game").html("Boooo its a tie! Want to play again?<br>" +
+                    "<button id='yes'>Yes</button>")
+                $("#new-game").show()
+                $("#turn-tracker").hide()
+                $(".circle").addClass("no-clicking")
+            }
+
+            //if no winner, the computer will do there play.
+
+            //This random function will randomly alternate between an offensive and defensive strategy.
+            // var randomMove=Math.round(Math.random())
+            // if(randomMove===0) {
+            //     var computerPlay = computersMoveOffense(initialBoard);
+            // } else{
+            //     computerPlay=computersMoveDefense(initialBoard)
+            // }
+
+            //This will check the board and see if offense or defense is more adventageous right now.
+            var offenseCheck = computersMoveOffense(initialBoard)
+            var defenseCheck = computersMoveDefense(initialBoard)
+
+            if (offenseCheck[1[0] > defenseCheck[1][0]]) {
+                var computerPlay = offenseCheck[0];
+            } else if (offenseCheck[1[0] < defenseCheck[1][0]]) {
+                computerPlay = defenseCheck[0]
+            } else if (offenseCheck[1[1] > defenseCheck[1][1]]) {
+                computerPlay = offenseCheck[0];
+            } else {
+                computerPlay = defenseCheck[0]
+            }
+            console.log(offenseCheck)
+            console.log(defenseCheck)
+            console.log(computerPlay)
+            var computerPlayChildClass = "." + (computerPlay[1] + 1);
+            var computerPlayParentClass = "." + (computerPlay[0] + 1);
+            var element = $(computerPlayChildClass, computerPlayParentClass);
+            $(element).children().css("background-color", "yellow")
+            $(element).children().css({
+                "transition-property": "transform",
+                "transition-duration": "1s",
+                "transition-timing-function": "linear",
+                "transition-delay": "1000ms"
+            })
+            $(element).children().css("transform", "translate(0, 500px)")
+            initialBoard[computerPlay[0]][computerPlay[1]] = "Y";
+            $("#turn-tracker").html("Your turn!")
+            $("#turn-tracker").css("color", "red")
+            $("#turn-tracker").css("right", "unset")
+            $("#turn-tracker").css("left", centerTurnTracker)
+
+            //This will check our array of values to see if there is a winner yet.
+            var gameProgress = connectFour(initialBoard);
+            if (gameProgress === "R") {
+                $("#new-game").html("You won! Want to play again?<br>" +
+                    "<button id='yes'>Yes</button>")
+                $("#new-game").show()
+                $("#header").hide()
+                $(".circle").addClass("no-clicking")
+                var playerScore = Number($("#player").html())
+                playerScore++
+                $("#player").html(playerScore)
 
 
-        } else if (gameProgress === "draw") {
-            $("#new-game").html("Boooo its a tie! Want to play again?<br>" +
-                "<button id='yes'>Yes</button>")
-            $("#new-game").show()
-            $("#turn-tracker").hide()
-            $(".circle").addClass("no-clicking")
+            } else if (gameProgress === "Y") {
+                $("#new-game").html("The computer won! Want to play again?<br>" +
+                    "<button id='yes'>Yes</button>")
+                $("#new-game").show()
+                $("#header").hide()
+                $(".circle").addClass("no-clicking")
+                var computerScore = Number($("#computer").html())
+                computerScore++
+                $("#computer").html(computerScore)
+
+
+            } else if (gameProgress === "draw") {
+                $("#new-game").html("Boooo its a tie! Want to play again?<br>" +
+                    "<button id='yes'>Yes</button>")
+                $("#new-game").show()
+                $("#header").hide()
+                $(".circle").addClass("no-clicking")
+                var drawScore = Number($("#draw").html())
+                drawScore++
+                $("#draw").html(drawScore)
+            }
         }
     }
 
@@ -999,5 +1009,5 @@ $(document).on('click','#yes',function(){
         [ '-', '-', '-', '-', '-', '-', '-' ] ]
     $(".color").css("transform", "translate(0, -500px)")
     $("#new-game").hide()
-    $("#turn-tracker").show()
+    $("#header").show()
 })

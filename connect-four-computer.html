@@ -7,18 +7,22 @@
     <link rel="stylesheet" href="connect-four.css">
 </head>
 <body>
-<div>
+<div id="header">
     <div id="turn-tracker">
         Your turn!
     </div>
     <div id="score-keeper" >
-        <div>
+        <div class="score">
             <div class="grid">Player</div>
-            <div class="grid">0</div>
+            <div id="player" class="grid">0</div>
         </div>
-        <div>
+        <div class="score">
             <div class="grid">Computer</div>
-            <div class="grid">0</div>
+            <div class="grid" id="computer">0</div>
+        </div>
+        <div class="score">
+            <div class="grid">Draws</div>
+            <div class="grid" id="draw">0</div>
         </div>
 
 
