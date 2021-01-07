@@ -3,8 +3,7 @@ var centerTurnTracker=(windowWidth-178)/2
 var newGameWidth=(windowWidth*3/4)
  // $("#turn-tracker").css("left", centerTurnTracker )
 
-//will check to see if computer has winning move. This will have to be executed before checking to see if player has winning move
-//that needs to be blocked
+
 
 function verticalWinningPotential(board,row,column,color){
     var currentRow=row;
@@ -243,6 +242,145 @@ function computerWinningMove (board){
     }
 }
 
+function computerSettingUpPlayerToBlockWinningMove (board){
+    var totalWinningMove=0;
+    for (let i=0; i< board.length; i++){
+        for (let j=0; j<board[i].length; j++){
+            //will only consider move if it is a valid move.
+            var winningMove=0;
+            let currentRow=i;
+            let currentColumn=j;
+            let currentTotal=0;
+            if (board[i][j]==="-"&&(i===5 || board[i+1][j]!=="-" )){
+
+                //first will check number of vertical streak.
+                if (i<5) {
+                    while (board[i + 1][j] === "Y") {
+                        currentTotal++
+                        if (i<4){
+                            i++;
+                        } else{
+                            break;
+                        }
+                    }
+                }
+                if(currentTotal===3){
+                    winningMove++
+                } else{
+                    currentTotal=0;
+                    i=currentRow;
+                }
+
+                //next, will check number of horizontal streak.
+
+                //will check total to the right first.
+                if (j<6) {
+                    while (board[i][j + 1] === "Y") {
+                        currentTotal++
+                        if (j<5) {
+                            j++;
+                        } else{
+                            break;
+                        }
+                    }
+                }
+                j=currentColumn;
+                //and then check total to the left.
+                if (j>0) {
+                    while (board[i][j - 1] === "Y") {
+                        currentTotal++
+                        if (j>1) {
+                            j--;
+                        } else{
+                            break;
+                        }
+                    }
+                }
+                if(currentTotal===3){
+                    winningMove++
+                } else{
+                    currentTotal=0;
+                    j=currentColumn
+                }
+
+                //next will check downwards diagonal
+                //first will check to the right
+                if (i>0 && j<6) {
+                    while (board[i - 1][j + 1] === "Y") {
+                        currentTotal++;
+                        if (i>1 && j<5) {
+                            j++;
+                            i--;
+                        } else{
+                            break;
+                        }
+                    }
+                }
+                j=currentColumn;
+                i=currentRow;
+                //and then check total to the left.
+                if (i<5&& j>0) {
+                    while (board[i + 1][j - 1] === "Y") {
+                        currentTotal++
+                        if (i<4 && j>1) {
+                            i++;
+                            j--;
+                        } else{
+                            break;
+                        }
+                    }
+                }
+                if(currentTotal===3){
+                    winningMove++
+                } else{
+                    currentTotal=0;
+                    i=currentRow
+                    j=currentColumn
+                }
+
+                //next will check upwards diagonal
+                //first will check to the right
+                if (i<5 && j<6) {
+                    while (board[i + 1][j + 1] === "Y") {
+                        currentTotal++;
+                        if (i<4 && j<5) {
+                            j++;
+                            i++;
+                        } else{
+                            break;
+                        }
+                    }
+                }
+                j=currentColumn;
+                i=currentRow;
+                //and then check total to the left.
+                if (i>0 && j>0) {
+                    while (board[i - 1][j - 1] === "Y") {
+                        currentTotal++
+                        if (i>1 && j>1) {
+                            i--;
+                            j--;
+                        } else{
+                            break;
+                        }
+                    }
+                }
+                if(currentTotal===3){
+                    winningMove++
+                } else{
+                    currentTotal=0;
+                    i=currentRow
+                    j=currentColumn
+                }
+                if (winningMove>0){
+                    totalWinningMove++
+            }
+
+            }
+        }
+    }
+    return totalWinningMove
+}
 
 
 //will check to see if player has a three streak that needs to be blocked
@@ -442,11 +580,14 @@ function checkComputersMove(board, row, column){
     //adds current potential move to board
     boardCopy[row][column]="Y"
 
-    //checks ot see if potential move will cause the player to be set up for a win.
+    //checks to see if potential move will cause the player to be set up for a win.
     if (blockPlayersWinningMove(boardCopy)){
-        //will return true if the computer just set up the player for a win.
+        //will return true if the computer just set up the player for a win, or if it just set up the player to block its winning move setup.
         return true;
-    } else{
+    } else if(computerSettingUpPlayerToBlockWinningMove(boardCopy)===1){
+        return true;
+
+    }else {
         return false;
     }
 }
