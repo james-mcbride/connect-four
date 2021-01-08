@@ -372,9 +372,10 @@ function computerSettingUpPlayerToBlockWinningMove (board){
                     i=currentRow
                     j=currentColumn
                 }
-                if (winningMove>0){
-                    totalWinningMove++
+
             }
+            if (winningMove>0){
+                totalWinningMove++
 
             }
         }
