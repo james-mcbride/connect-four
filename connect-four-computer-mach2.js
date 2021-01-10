@@ -455,7 +455,7 @@ function checkComputersMove(board, row, column){
 //This is our offensive computer strategy. It will first check and stop the player if they are about to win,
 // then it will focus on picking the move that gives it the best chance of winning.
 
-function computersMoveOffense(board){
+function computersIdealMove(board, color){
     //this function will check to see if the computer has a winning move that it needs to execute.
     if (computerWinningMove(board)){
         return [computerWinningMove(board), [1,0]]
@@ -470,7 +470,7 @@ function computersMoveOffense(board){
     var streakTracker=[0,0];
     var bestMove=[]
     for (let i=0; i< board.length; i++){
-        for (let j=0; j<board[i].length; j++){
+        for (let j=0; j<board[i].length;  j++){
             //will only consider move if it is a valid move.
             let currentRow=i;
             let currentColumn=j;
@@ -480,18 +480,16 @@ function computersMoveOffense(board){
             if (board[i][j]==="-"&&(i===5 || board[i+1][j]!=="-" )){
 
                 //first will check number of vertical streak.
-                if (i<5) {
-                    while (board[i + 1][j] === "Y") {
+                while (i<=4) {
+                    if (board[i + 1][j] ===color) {
                         currentTotal++
                         totalStreak++
-                        if (i<4){
-                            i++;
-                        } else{
-                            break;
-                        }
+                        i++
+                    }else{
+                        break;
                     }
                 }
-                if(currentTotal>highestTotal && verticalWinningPotential(board, currentRow, currentColumn, "Y")>=4){
+                if(currentTotal>highestTotal && verticalWinningPotential(board, currentRow, currentColumn, color)>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     i=currentRow;
@@ -502,33 +500,43 @@ function computersMoveOffense(board){
 
                 //next, will check number of horizontal streak.
                 //will check total to the right first.
-                if (j<6) {
-                    while (board[i][j + 1] === "Y") {
+                while(j<=5) {
+                    if (board[i][j + 1] === color) {
                         currentTotal++
                         totalStreak++;
-                        if (j < 5) {
-                            j++;
-                        } else {
+                        j++
+                    } else if(board[i][j + 1] === "-"&&j<=4){
+                        if (j<=4 && board[i][j + 2] === color) {
+                            totalStreak--
+                            j++
+                            continue;
+                        } else{
                             break;
-
                         }
+                    } else {
+                        break;
                     }
                 }
                 j=currentColumn;
                 //and then check total to the left.
-                if (j>0) {
-                    while (board[i][j - 1] === "Y") {
+                while (j>=1) {
+                    if (board[i][j - 1] === color) {
                         currentTotal++
-                        totalStreak++;
-                        if (j>1) {
-                            j--;
-                        } else {
-                            break
+                        totalStreak++
+                        j--
+                    } else if(board[i][j - 1] === "-"&&j>=2) {
+                        if (j>=2 && board[i][j - 2] === color) {
+                            totalStreak--
+                            j--
+                            continue;
+                        } else{
+                            break;
                         }
-
+                    }else {
+                        break
                     }
                 }
-                if(currentTotal>highestTotal && horizontalWinningPotential(board, currentRow, currentColumn, "Y")>=4){
+                if(currentTotal>highestTotal && horizontalWinningPotential(board, currentRow, currentColumn, color)>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     j=currentColumn
@@ -539,35 +547,50 @@ function computersMoveOffense(board){
 
                 //next will check upwards diagonal
                 //first will check to the right
-                if (i>0&&j<6) {
-                    while (board[i - 1][j + 1] === "Y") {
+                while (i>=1&&j<=5) {
+                    if (board[i - 1][j + 1] === color) {
                         currentTotal++;
                         totalStreak++;
-                        if (i >1 && j < 5) {
-                            j++;
-                            i--;
-                        } else {
+                        j++
+                        i--
+                    } else if(board[i - 1][j + 1] === "-") {
+                        if ((i>=2 && j<=4) && board[i-2][j + 2] === color) {
+                            totalStreak--
+                            j++
+                            i--
+                            continue;
+                        } else{
                             break;
-
                         }
+                    }else {
+                        break;
                     }
                 }
                 j=currentColumn;
                 i=currentRow;
                 //and then check total to the left.
-                if (i<5 && j>0) {
-                    while (board[i + 1][j - 1] === "Y") {
+                while (i<=4 && j>=1) {
+                    if (board[i + 1][j - 1] === color) {
                         currentTotal++
                         totalStreak++;
-                        if (i<4 && j>1) {
-                            i++;
-                            j--;
+                        i++
+                        j--
+
+                    } else if(board[i + 1][j - 1] === "-"){
+                        if ((i<=3 && j>=2) && board[i+2][j - 2] === color ) {
+                            totalStreak--
+                            i++
+                            j--
+                            continue;
                         } else{
+
                             break;
                         }
+                    }else{
+                        break;
                     }
                 }
-                if(currentTotal>highestTotal && upwardDiagonalWinningPotential(board, currentRow, currentColumn, "Y")>=4){
+                if(currentTotal>highestTotal && upwardDiagonalWinningPotential(board, currentRow, currentColumn, color)>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     i=currentRow
@@ -580,34 +603,51 @@ function computersMoveOffense(board){
 
                 //next will check downwards diagonal
                 //first will check to the right
-                if (i<5&&j<6) {
-                    while (board[i + 1][j + 1] === "Y") {
+                while (i<=4&&j<=5) {
+                    if (board[i + 1][j + 1] === color) {
                         currentTotal++;
                         totalStreak++;
-                        if (i<4&&j<5) {
-                            j++;
-                            i++;
+                        i++
+                        j++
+                    }else if(board[i + 1][j + 1] === "-"){
+                        if ((i<=3 && j<=4) && board[i+2][j + 2] === color ) {
+                            totalStreak--
+                            i++
+                            j++
+                            continue;
                         } else{
+
                             break;
                         }
+                    }  else{
+
+                        break;
                     }
                 }
                 j=currentColumn;
                 i=currentRow;
                 //and then check total to the left.
-                if (i>0 && j>0) {
-                    while (board[i - 1][j - 1] === "Y") {
+                while (i>=1 && j>=1) {
+                    if (board[i - 1][j - 1] === color) {
                         currentTotal++
                         totalStreak++;
-                        if (i>1 && j>1) {
-                            i--;
-                            j--;
+                        i--
+                        j--
+                    }else if(board[i - 1][j - 1] === "-"){
+                        if ((i>=2 && j>=2) && board[i-2][j - 2] === color ) {
+                            totalStreak--
+                            i--
+                            j--
+                            continue;
                         } else{
+
                             break;
                         }
+                    } else{
+                        break;
                     }
                 }
-                if(currentTotal>highestTotal  && downwardDiagonalWinningPotential(board, currentRow, currentColumn, "Y")>=4){
+                if(currentTotal>highestTotal  && downwardDiagonalWinningPotential(board, currentRow, currentColumn, color)>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     i=currentRow
@@ -644,202 +684,12 @@ function computersMoveOffense(board){
     }
 }
 
-//This will be our defensive computer strategy. It will always try to block the highest streak the
-//player currently has going on.
+function computersMoveOffense(board){
+    return computersIdealMove(board,"Y")
+}
 function computersMoveDefense(board){
-
-    //this function will check to see if the computer has a winning move that it needs to execute.
-    if (computerWinningMove(board)){
-        return [computerWinningMove(board), [0,0]]
-    }
-    //this function will check to see if the player has a three streak winning move that needs to be blocked.
-    if (blockPlayersWinningMove(board)){
-        return [blockPlayersWinningMove(board), [0,0]]
-    }
-
-    //now will check to see what our best move to block the player is.
-    var streakTracker=[0,0];
-    var bestMove=[]
-    for (let i=0; i< board.length; i++){
-        for (let j=0; j<board[i].length; j++){
-            //will only consider move if it is a valid move.
-            let currentRow=i;
-            let currentColumn=j;
-            let highestTotal=0;
-            let currentTotal=0;
-            let totalStreak=0;
-            if (board[i][j]==="-"&&(i===5 || board[i+1][j]!=="-" )){
-
-                //first will check number of vertical streak.
-                // console.log(verticalWinningPotential(board, i, j, "R"))
-                if (i<5) {
-                    while (board[i + 1][j] === "R") {
-                        currentTotal++
-                        totalStreak++
-                        if (i<4){
-                            i++;
-                        } else{
-                            break;
-                        }
-                    }
-                }
-                if(currentTotal>highestTotal && verticalWinningPotential(board, currentRow, currentColumn, "R")>=4){
-                    highestTotal=currentTotal;
-                    currentTotal=0;
-                    i=currentRow;
-                } else{
-                    currentTotal=0;
-                    i=currentRow;
-                }
-
-                //next, will check number of horizontal streak.
-
-                //will check total to the right first.
-                if (j<6) {
-                    while (board[i][j + 1] === "R") {
-                        currentTotal++
-                        totalStreak++;
-                        if (j < 5) {
-                            j++;
-                        } else {
-                            break;
-
-                        }
-                    }
-                }
-                j=currentColumn;
-                //and then check total to the left.
-                if (j>0) {
-                    while (board[i][j - 1] === "R") {
-                        currentTotal++
-                        totalStreak++;
-                        if (j>1) {
-                            j--;
-                        } else {
-                            break
-                        }
-
-                    }
-                }
-                if(currentTotal>highestTotal && horizontalWinningPotential(board, currentRow, currentColumn, "R")>=4){
-                    highestTotal=currentTotal;
-                    currentTotal=0;
-                    j=currentColumn
-                } else{
-                    currentTotal=0;
-                    j=currentColumn
-                }
-
-                //next will check upwards diagonal
-                //first will check to the right
-                if (i>0&&j<6) {
-                    while (board[i - 1][j + 1] === "R") {
-                        currentTotal++;
-                        totalStreak++;
-                        if (i >1 && j < 5) {
-                            j++;
-                            i--;
-                        } else {
-                            break;
-
-                        }
-                    }
-                }
-                j=currentColumn;
-                i=currentRow;
-                //and then check total to the left.
-                if (i<5 && j>0) {
-                    while (board[i + 1][j - 1] === "R") {
-                        currentTotal++
-                        totalStreak++;
-                        if (i<4 && j>1) {
-                            i++;
-                            j--;
-                        } else{
-                            break;
-                        }
-                    }
-                }
-                if(currentTotal>highestTotal && upwardDiagonalWinningPotential(board, currentRow, currentColumn, "R")>=4){
-                    highestTotal=currentTotal;
-                    currentTotal=0;
-                    i=currentRow
-                    j=currentColumn
-                } else{
-                    currentTotal=0;
-                    i=currentRow
-                    j=currentColumn
-                }
-
-                //next will check downwards diagonal
-                //first will check to the right
-                if (i<5&&j<6) {
-                    while (board[i + 1][j + 1] === "R") {
-                        currentTotal++;
-                        totalStreak++;
-                        if (i<4&&j<5) {
-                            j++;
-                            i++;
-                        } else{
-                            break;
-                        }
-                    }
-                }
-                j=currentColumn;
-                i=currentRow;
-                //and then check total to the left.
-                if (i>0 && j>0) {
-                    while (board[i - 1][j - 1] === "R") {
-                        currentTotal++
-                        totalStreak++;
-                        if (i>1 && j>1) {
-                            i--;
-                            j--;
-                        } else{
-                            break;
-                        }
-                    }
-                }
-                if(currentTotal>highestTotal && downwardDiagonalWinningPotential(board, currentRow, currentColumn, "R")>=4){
-                    highestTotal=currentTotal;
-                    currentTotal=0;
-                    i=currentRow
-                    j=currentColumn
-                } else{
-                    currentTotal=0;
-                    i=currentRow
-                    j=currentColumn
-                }
-
-                //alright, now we should have our highest streak total for this point.
-                //We will now check and see if this is our best move so far.
-                if (checkComputersMove(board, currentRow, currentColumn)){
-                    continue;
-                } else if(highestTotal>streakTracker[0]){
-                    bestMove=[[i,j]];
-                    streakTracker=[highestTotal, totalStreak]
-                } else if (highestTotal===streakTracker[0]){
-                    if (totalStreak>streakTracker[1]){
-                        bestMove=[[i,j]];
-                        streakTracker=[highestTotal, totalStreak]
-                    } else if (totalStreak===streakTracker[1]){
-                        bestMove.push([i,j])
-                    }
-                }
-            }
-        }
-    }
-    //If there is one clear best move, the computer will choose that one.
-    if (bestMove.length===1){
-        return [bestMove[0], streakTracker]
-    } else{
-        //If there are multiple moves that are equally advantageous for the computer, one will be randomly chosen.
-        var randomIndex=Math.round(Math.random()*(bestMove.length-1))
-        return [bestMove[randomIndex], streakTracker]
-    }
+    return computersIdealMove(board, "R")
 }
-
-
 
 var initialBoard=[ [ '-', '-', '-', '-', '-', '-', '-' ],
     [ '-', '-', '-', '-', '-', '-', '-' ],
@@ -853,22 +703,6 @@ $(".circle").click(function (x) {
     if ($(this).hasClass("no-clicking")===false) {
         var column = $(this).attr('class')[7];
         var row = $(this).parent().attr('class')[5]
-        // var spotOpen = true;
-
-        //this will automatically stop the rest of the functions from stopping if an already filled
-        //spot is chosen
-        // if (initialBoard[row - 1][column - 1] !== "-") {
-        //     return;
-        // }
-
-        //This will check to make sure all spots beneath the chosen spot are already filled.
-        // if (row !== 6) {
-        //     for (let i = row; i < initialBoard.length; i++) {
-        //         if (initialBoard[i][column - 1] === "-") {
-        //             spotOpen = false;
-        //         }
-        //     }
-        // }
 
         if (row != 6) {
             for (let i = row-1; i < initialBoard.length; i++) {
