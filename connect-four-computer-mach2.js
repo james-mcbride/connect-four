@@ -469,6 +469,7 @@ function computersIdealMove(board, color){
     //now will check to see what our best move is.
     var streakTracker=[0,0];
     var bestMove=[]
+    var skippedEmptySpace=false
     for (let i=0; i< board.length; i++){
         for (let j=0; j<board[i].length;  j++){
             //will only consider move if it is a valid move.
@@ -489,7 +490,7 @@ function computersIdealMove(board, color){
                         break;
                     }
                 }
-                if(currentTotal>highestTotal && verticalWinningPotential(board, currentRow, currentColumn, color)>=4){
+                 if(currentTotal>highestTotal && verticalWinningPotential(board, currentRow, currentColumn, color)>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     i=currentRow;
@@ -509,6 +510,7 @@ function computersIdealMove(board, color){
                         if (j<=4 && board[i][j + 2] === color) {
                             totalStreak--
                             j++
+                            skippedEmptySpace=true
                             continue;
                         } else{
                             break;
@@ -528,6 +530,7 @@ function computersIdealMove(board, color){
                         if (j>=2 && board[i][j - 2] === color) {
                             totalStreak--
                             j--
+                            skippedEmptySpace=true
                             continue;
                         } else{
                             break;
@@ -536,7 +539,11 @@ function computersIdealMove(board, color){
                         break
                     }
                 }
-                if(currentTotal>highestTotal && horizontalWinningPotential(board, currentRow, currentColumn, color)>=4){
+                if(currentTotal===3){
+                    currentTotal=0;
+                    j=currentColumn;
+                    continue;
+                }else if(currentTotal>highestTotal && horizontalWinningPotential(board, currentRow, currentColumn, color)>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     j=currentColumn
@@ -558,6 +565,7 @@ function computersIdealMove(board, color){
                             totalStreak--
                             j++
                             i--
+                            skippedEmptySpace=true
                             continue;
                         } else{
                             break;
@@ -581,6 +589,7 @@ function computersIdealMove(board, color){
                             totalStreak--
                             i++
                             j--
+                            skippedEmptySpace=true
                             continue;
                         } else{
 
@@ -590,7 +599,12 @@ function computersIdealMove(board, color){
                         break;
                     }
                 }
-                if(currentTotal>highestTotal && upwardDiagonalWinningPotential(board, currentRow, currentColumn, color)>=4){
+                if(currentTotal===3){
+                    currentTotal=0;
+                    j=currentRow
+                    i=currentColumn;
+                    continue;
+                }else if(currentTotal>highestTotal && upwardDiagonalWinningPotential(board, currentRow, currentColumn, color)>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     i=currentRow
@@ -614,6 +628,7 @@ function computersIdealMove(board, color){
                             totalStreak--
                             i++
                             j++
+                            skippedEmptySpace=true
                             continue;
                         } else{
 
@@ -638,6 +653,7 @@ function computersIdealMove(board, color){
                             totalStreak--
                             i--
                             j--
+                            skippedEmptySpace=true
                             continue;
                         } else{
 
@@ -647,7 +663,12 @@ function computersIdealMove(board, color){
                         break;
                     }
                 }
-                if(currentTotal>highestTotal  && downwardDiagonalWinningPotential(board, currentRow, currentColumn, color)>=4){
+                if(currentTotal===3){
+                    currentTotal=0;
+                    j=currentColumn;
+                    i=currentRow
+                    continue;
+                }else if(currentTotal>highestTotal  && downwardDiagonalWinningPotential(board, currentRow, currentColumn, color)>=4){
                     highestTotal=currentTotal;
                     currentTotal=0;
                     i=currentRow
